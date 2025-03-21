@@ -1,0 +1,54 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+struct Job{
+    int id;
+    int deadline;
+    int profit;
+};
+bool compare(Job a,Job b){
+    return a.profit > b.profit;
+}
+void JobSchudling(vector<Job> &Jobs){
+    sort(Jobs.begin(),Jobs.end(),compare);
+    int maxDeadline =0;
+    for(int i=0;i<Jobs.size();i++){
+        maxDeadline=max(maxDeadline,Jobs[i].deadline);
+    }
+    vector<int> schedule(maxDeadline+1,-1);
+    vector<bool> slot(maxDeadline,false);
+    int totalProfit=0;
+    int Jobdone=0;
+
+    for(int i=0;i<Jobs.size();i++){
+        for(int j = Jobs[i].deadline -1;j>=0;j--){
+            if(!slot[j]){
+                schedule[j]=Jobs[i].id;
+                slot[j]=true;
+                totalProfit +=Jobs[i].profit;
+                Jobdone++;
+                break;
+            }
+        }
+    }
+    for(int i=0;i<maxDeadline;i++){
+        if(schedule[i] !=-1){
+            cout<<schedule[i]<<" "<<endl;
+        }
+    }
+    cout<<totalProfit;
+}
+
+int main(){
+    int num;
+    cin>>num;
+    vector<Job> Jobs(num);
+    for(int i=0;i<num;i++){
+        cin>>Jobs[i].id;
+        cin>>Jobs[i].deadline;
+        cin>>Jobs[i].profit;
+    }
+
+    JobSchudling(Jobs);
+
+}
