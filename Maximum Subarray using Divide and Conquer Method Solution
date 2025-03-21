@@ -1,0 +1,72 @@
+
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+int crossSum(vector<int> &arr,int left,int mid,int right){
+    int sum =0;
+    int leftSum=INT_MIN;
+    for(int i=mid;i>=left;i--){
+        sum+=arr[i];
+        if(sum>leftSum){
+            leftSum=sum;
+        }
+    }
+
+    sum =0;
+    int RightSum=INT_MIN;
+    for(int i=mid+1;i<=right;i++){
+        sum+=arr[i];
+        if(sum>RightSum){
+            RightSum=sum;
+        }
+    }
+    return leftSum+RightSum;
+}
+int maxSubArray(vector<int>&arr ,int left ,int right){
+    if(left==right){
+        return arr[left];
+    }
+    int mid = (left+right)/2;
+    int leftMax=maxSubArray(arr ,left ,mid);
+    int rightMax=maxSubArray(arr ,mid+1,right);
+    int crossMax=crossSum(arr ,left ,mid,right);
+
+    return max(leftMax,max(rightMax,crossMax));
+}
+void PrintMaxSubarray(vector<int> &arr,int num){
+    int maxSum=INT_MIN;
+    int sum=0;
+    int start=0,end=0,temp=0;
+    for(int i=0;i<num;i++){
+        sum+=arr[i];
+        if(sum>maxSum){
+            maxSum=sum;
+            start=temp;
+            end=i;
+        }
+        if(sum<0){
+            sum=0;
+            temp=i+1;
+        }
+    }
+    for (int i = start; i <=end; i++) {
+        cout<< arr[i];
+    }
+
+}
+int main(){
+    int num;
+    cin >> num;
+    
+    vector<int> arr(num);
+    for (int i = 0; i < num; i++) {
+        cin >> arr[i];
+    }
+
+    int MaxSum = maxSubArray(arr,0,num-1);
+    cout<<MaxSum<<"\n";
+    PrintMaxSubarray(arr,num);
+    return 0;
+
+}
