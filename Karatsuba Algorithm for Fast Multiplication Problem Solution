@@ -1,0 +1,31 @@
+#include<iostream>
+#include<algorithm>
+#include<math.h>
+#include<climits>
+using namespace std;
+long long Karatsuba(long long x , long long y){
+    if(x<10 || y<10){
+        return x*y;
+    }
+    int n = max((int)log10(x)+1,(int)log10(y)+1);
+    int m = n/2;
+    int power=pow(10,m);
+    long long a = x/power;
+    long long b = x%power;
+    long long c = y/power;
+    long long d = y%power;
+
+    long long z0=Karatsuba(b,d);
+    long long z1=Karatsuba(a+b,c+d);
+    long long z2=Karatsuba(a,c);
+
+    return z2*pow(10,2*m)+(z1-z0-z2)*pow(10,m)+z0;
+}
+
+int main(){
+    long long x;
+    long long y;
+    cin>>x>>y;
+    cout<<Karatsuba(x,y);
+    return 0;
+}
